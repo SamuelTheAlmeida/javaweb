@@ -1,6 +1,7 @@
+package com.ufpr.tads.web2.servlets;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,33 +9,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-    
+@WebServlet(urlPatterns = {"/LogoutServlet"})
+public class LogoutServlet extends HttpServlet {
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // pega os dados passados pelo formulario de login
-        String usuarioForm = request.getParameter("usuario");
-        String senhaForm = request.getParameter("senha");
-        // instancia um usuarioDAO para usar a função de consulta no banco
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        // consulta se o usuário existe no banco, e guarda o usuario retornado (pode ser null)
-        Usuario usuario = usuarioDAO.consultaUsuario(usuarioForm, senhaForm);
-        
-        // se usuario veio null, então falhou o login
-        if (usuario == null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ErroServlet");
-            request.setAttribute("msg", "Erro no login");
-            request.setAttribute("page", "index.html");
-            dispatcher.forward(request,response);
-        } else {
-            // usuário existe, então cria ou reutiliza uma sessão
-            HttpSession session = request.getSession(true);
-            // grava o login e a senha na sessão
-            session.setAttribute("login", usuarioForm);
-            session.setAttribute("senha", senhaForm);
-            // redireciona para o portalservlet
-            response.sendRedirect("PortalServlet");
+        // obtém a sessão ativa
+        HttpSession session = request.getSession();
+        // cancela a sessão (logout)
+        session.invalidate();
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Logout</title>");    
+            out.println("<link href=\"https://bootswatch.com/3/superhero/bootstrap.css\" rel=\"stylesheet\">");
+            out.println("<style type=\"text/css\">\n" +
+"    	#center {\n" +
+"    		width: 30%;\n" +
+"    		margin: 150px auto;\n" +
+"    	}\n" +
+"    </style>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("  <div class=\"container text-center\" id=\"center\">\n" +
+"    <h1>Você foi deslogado...</h1>\n" +
+"    <a class=\"btn btn-success\" href=\"index.html\">Retornar ao Início</a>\n" +
+"  </div>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 

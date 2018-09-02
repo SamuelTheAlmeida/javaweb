@@ -1,3 +1,6 @@
+package com.ufpr.tads.web2.dao;
+
+import com.ufpr.tads.web2.beans.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -74,9 +77,9 @@ public class UsuarioDAO {
             // prepara a query
             PreparedStatement st = con.prepareStatement(query);
             // define os parametros
-            st.setString(1, usuario.getLoginUsuario());
-            st.setString(2, usuario.getNomeUsuario());
-            st.setString(3, usuario.getSenhaUsuario());
+            st.setString(1, usuario.getLogin());
+            st.setString(2, usuario.getNome());
+            st.setString(3, usuario.getSenha());
             // o insert não retorna um resultSet, então utilizamos o executeUpdate()
             // o executeUpdate() retorna o número de linhas inseridas
             // se uma linha foi inserida, então retorna true

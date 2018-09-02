@@ -1,3 +1,5 @@
+package com.ufpr.tads.web2.dao;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 

@@ -1,16 +1,32 @@
+package com.ufpr.tads.web2.servlets;
+
+import com.ufpr.tads.web2.beans.LoginBean;
+import com.ufpr.tads.web2.dao.UsuarioDAO;
+import com.ufpr.tads.web2.beans.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 @WebServlet(urlPatterns = {"/CadastrarUsuarioServlet"})
 public class CadastrarUsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        LoginBean login = (LoginBean)session.getAttribute("loginBean");
+        if (login.getNome() == null && login.getId() == 0) {
+            RequestDispatcher rp = getServletContext().getRequestDispatcher("/erro.jsp");
+            request.setAttribute("msg", "Usuário não está logado...");
+            request.setAttribute("pageReturn", "index.html");
+            rp.forward(request, response);
+        }
+
         // Instancia um objeto DAO para poder acessar a função de inserir no BD
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         // Declara uma variável que guardará a mensagem de sucesso ou falha na inserção
@@ -24,9 +40,9 @@ public class CadastrarUsuarioServlet extends HttpServlet {
         // Verifica se os dados não estão vazios
         if (!usuarioForm.isEmpty() & !nomeForm.isEmpty() & !senhaForm.isEmpty()) {
             // se dados não vazios, então preenche o objeto Usuario
-            usu.setLoginUsuario(usuarioForm);
-            usu.setNomeUsuario(nomeForm);
-            usu.setSenhaUsuario(senhaForm);
+            usu.setLogin(usuarioForm);
+            usu.setNome(nomeForm);
+            usu.setSenha(senhaForm);
             // tenta a inserção no banco e grava o resultado na string result
             if (usuarioDAO.cadastraUsuario(usu)) {
                 result = "Usuário cadastrado com sucesso";
@@ -56,7 +72,7 @@ public class CadastrarUsuarioServlet extends HttpServlet {
             // result mostra a string dizendo se inseriu ou não
             out.println("<h1> " + result + "</h1>");
             out.println("<h2>");
-            out.println("<a href='PortalServlet'>Retornar</a>");
+            out.println("<a href='portal.jsp'>Retornar</a>");
             out.println("</h2>");
             out.println("</div>");
             out.println("</body>");
