@@ -23,7 +23,7 @@ public class CadastrarUsuarioServlet extends HttpServlet {
         if (login.getNome() == null && login.getId() == 0) {
             RequestDispatcher rp = getServletContext().getRequestDispatcher("/erro.jsp");
             request.setAttribute("msg", "Usuário não está logado...");
-            request.setAttribute("pageReturn", "index.html");
+            request.setAttribute("pageReturn", "index.jsp");
             rp.forward(request, response);
         }
 

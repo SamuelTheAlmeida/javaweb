@@ -1,5 +1,11 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.ufpr.tads.web2.servlets;
 
+import com.ufpr.tads.web2.beans.LoginBean;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -10,18 +16,43 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = {"/LogoutServlet"})
-public class LogoutServlet extends HttpServlet {
+/**
+ *
+ * @author SAMUEL
+ */
+@WebServlet(name = "FormNovoClienteServlet", urlPatterns = {"/FormNovoClienteServlet"})
+public class FormNovoClienteServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // obtém a sessão ativa
+        int id;
         HttpSession session = request.getSession();
-        // cancela a sessão (logout)
-        session.invalidate();
-        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-        request.setAttribute("msg", "Usuario desconectado com sucesso");
-        rd.forward(request, response);
+        RequestDispatcher rd;
+        try {
+            id = ((LoginBean)session.getAttribute("loginBean")).getId();
+        } catch (Exception e) {
+            id = 0;
+        }
+        
+        if (id == 0) {
+            rd = getServletContext().getRequestDispatcher("/index.jsp");
+            request.setAttribute("msg", "Usuario deve se autenticar para acessar o sistema");
+            rd.forward(request, response);
+        } else {
+            rd = getServletContext().getRequestDispatcher("/clientesNovo.jsp");
+            rd.forward(request, response);
+        }
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

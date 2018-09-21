@@ -30,9 +30,8 @@ public class LoginServlet extends HttpServlet {
         
         // se usuario veio null, então falhou o login
         if (usuario == null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/erro.jsp");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
             request.setAttribute("msg", "Erro no login");
-            request.setAttribute("page", "index.html");
             dispatcher.forward(request,response);
         } else {
             LoginBean loginBean = new LoginBean(usuario.getId(), usuario.getNome());

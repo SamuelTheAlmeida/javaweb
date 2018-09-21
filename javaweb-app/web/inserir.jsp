@@ -1,10 +1,16 @@
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
 <%
-    LoginBean login = (LoginBean)session.getAttribute("loginBean");
-   if (login.getNome() == null && login.getId() == 0) {
+    int id;
+     try {
+         id = ((LoginBean)session.getAttribute("loginBean")).getId();
+     } catch (Exception e) {
+         id = 0;
+     }
+        
+   if (id == 0) {
        RequestDispatcher rp = getServletContext().getRequestDispatcher("/erro.jsp");
        request.setAttribute("msg", "Usuário não está logado...");
-       request.setAttribute("pageReturn", "index.html");
+       request.setAttribute("pageReturn", "index.jsp");
        rp.forward(request, response);
    }
 %>

@@ -10,9 +10,8 @@
    }
    
    if (idUsuario == 0) { 
-        RequestDispatcher rd = request.getRequestDispatcher("/erro.jsp");
-        request.setAttribute("msg", "Usuario não logado");
-        request.setAttribute("page", "index.html");
+        RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
+        request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema.");
         rd.forward(request, response);
    } else {
   %>
@@ -23,7 +22,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Portal</title>
         <link href="https://bootswatch.com/3/superhero/bootstrap.css" rel="stylesheet">
         <style>
             #center {
@@ -35,8 +34,11 @@
     <body>
         <div class="container text-center" id="center">
         <h1>Bem vindo, <jsp:getProperty name="loginBean" property="nome"/></h1>
-        <a class="btn btn-success" href="inserir.jsp">Inserir novo</a>
-        <a class="btn btn-success" href="LogoutServlet">Logout</a>
+        <nav class="navbar navbar-default">
+            <a class="btn btn-default" href="ClientesServlet"><strong class="text-info">Cadastro de Clientes</strong></a>
+            <a class="btn btn-default" href="LogoutServlet"><strong class="text-warning">Logout</strong></a>         
+        </nav>
+
         <br>
         <footer>
             <p> Em caso de problemas contactar o administrador: <% out.print(email); %></p>
