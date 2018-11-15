@@ -43,7 +43,7 @@ public class ClienteDAO {
     }
     
     
-    public boolean inserirCliente(Cliente cliente) {
+    public boolean inserirCliente(Cliente cliente) throws SQLException {
         boolean result = false;
         Connection con = ConnectionFactory.getConnection();
         try {
@@ -60,8 +60,8 @@ public class ClienteDAO {
             st.setString(8, cliente.getUf());
             st.execute();
             result = true;
-        } catch (Exception e) {
-            result = false;
+        } catch (SQLException e) {
+            throw e;
         }
         return result;
     } 

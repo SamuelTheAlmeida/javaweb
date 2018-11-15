@@ -35,39 +35,41 @@
     </head>
     <body>
         <div class="container text-center" id="center">
-        <form class="" method="POST" action="AlterarClienteServlet">
+        <form class="" method="POST" action="ClientesServlet">
+          <input type="hidden" name="action" value="update" />
+
             <input hidden type="text" name="idCliente" id="idCliente" value="<% out.print(cliente.getId()); %>" >
         <div class="form-group">
           <label for="inputCPF">CPF</label>
-          <input type="text" class="form-control" id="inputCPF" name="cpf" value="<% out.print(cliente.getCpf()); %>">
+          <input type="text" class="form-control" id="inputCPF" name="cpf" value=" ${cliente.cpf}">
         </div>
         <div class="form-group">
           <label for="inputNome">Nome</label>
-          <input type="text" class="form-control" id="inputNome" name="nome" value="<% out.print(cliente.getNome()); %>">
+          <input type="text" class="form-control" id="inputNome" name="nome" value="${cliente.nome}">
         </div>
         <div class="form-group">
           <label for="inputEmail">Email</label>
-          <input type="email" class="form-control" id="inputEmail" name="email" value="<% out.print(cliente.getEmail()); %>">
+          <input type="email" class="form-control" id="inputEmail" name="email" value="${cliente.email}">
         </div>
        <div class="form-group">
           <label for="inputRua">Rua</label>
-          <input type="text" class="form-control" id="inputRua" name="rua" value="<% out.print(cliente.getRua()); %>">
+          <input type="text" class="form-control" id="inputRua" name="rua" value="${cliente.rua}">
         </div>
         <div class="form-group">
           <label for="inputNúmero">Número</label>
-          <input type="number" class="form-control" id="inputNumero" name="numero" value="<% out.print(cliente.getNumero()); %>">
+          <input type="number" class="form-control" id="inputNumero" name="numero" value="${cliente.numero}">
         </div>
        <div class="form-group">
           <label for="inputCep">CEP</label>
-          <input type="number" class="form-control" id="inputCEP" name="cep" value="<% out.print(cliente.getCep()); %>">
+          <input type="number" class="form-control" id="inputCEP" name="cep" value="${cliente.cep}">
         </div>
        <div class="form-group">
           <label for="inputCidade">Cidade</label>
-          <input type="text" class="form-control" id="inputCidade" name="cidade" value="<% out.print(cliente.getCidade()); %>">
+          <input type="text" class="form-control" id="inputCidade" name="cidade" value="${cliente.cidade}">
         </div>
        <div class="form-group">
           <label for="inputCidade">UF</label>
-          <input type="text" class="form-control" id="inputUF" name="uf" value="<% out.print(cliente.getUf()); %>">
+          <input type="text" class="form-control" id="inputUF" name="uf" value="${cliente.uf}">
         </div>
         
        

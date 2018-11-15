@@ -1,5 +1,7 @@
 <%@page import="com.ufpr.tads.web2.beans.Cliente"%>
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
+<%@ page errorPage="erro.jsp" %>
+
 <%
    int id;
         try {
@@ -32,7 +34,8 @@
     <body>
         <div class="container text-center" id="center">
         <h1>Bem vindo, <jsp:getProperty name="loginBean" property="nome"/></h1>
-        <form class="" method="POST" action="NovoClienteServlet">
+        <form class="" method="POST" action="ClientesServlet">
+            <input type="hidden" name="action" value="new" />
         <div class="form-group">
           <label for="inputCPF">CPF</label>
           <input type="text" class="form-control" id="inputCPF" name="cpf" required="required">

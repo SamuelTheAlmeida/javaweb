@@ -1,8 +1,6 @@
-<%-- 
-    Document   : erro
-    Created on : 01/09/2018, 18:14:18
-    Author     : SAMUEL
---%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ page isErrorPage="true" %>
 
 <%
   String pageReturn = (String)request.getAttribute("page");
@@ -27,8 +25,10 @@
     </head>
     <body>
         <div class="container text-center" id="center">
-            <h1>Erro: <% out.print(msg); %> </h1> 
-            <a href="<%out.print(pageReturn); %>">Retornar</a>
+            <h1 class="text-danger">Erro: <c:out value="${pageContext.exception.message}"/> </h1> 
+            <h6><c:out value="${pageContext.out.flush()}" /></h6>
+            <h6><c:out value="${pageContext.exception.printStackTrace(pageContext.response.writer)}" /></h6>
+           <!-- <a href="<%out.print(pageReturn); %>">Retornar</a> -->
         <footer>
             <p> Em caso de problemas contactar o administrador: <% out.print(email); %></p>
         </footer>

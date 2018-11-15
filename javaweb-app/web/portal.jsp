@@ -1,5 +1,7 @@
+<%@ page errorPage="erro.jsp" %>
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
 <% 
+   
    int idUsuario;
    ServletContext ctx = request.getServletContext();
    String email = (String)ctx.getAttribute("configuracao");
@@ -14,6 +16,7 @@
         request.setAttribute("msg", "Usuário deve se autenticar para acessar o sistema.");
         rd.forward(request, response);
    } else {
+       
   %>
 <jsp:useBean id="loginBean" class="com.ufpr.tads.web2.beans.LoginBean" scope="session"/>
 
@@ -33,7 +36,7 @@
     </head>
     <body>
         <div class="container text-center" id="center">
-        <h1>Bem vindo, <jsp:getProperty name="loginBean" property="nome"/></h1>
+        <h1>Bem vindo, <c:out value="${loginBean.nome}"/></h1>
         <nav class="navbar navbar-default">
             <a class="btn btn-default" href="ClientesServlet"><strong class="text-info">Cadastro de Clientes</strong></a>
             <a class="btn btn-default" href="LogoutServlet"><strong class="text-warning">Logout</strong></a>         
@@ -46,5 +49,5 @@
         </div>
     </body>
 </html>
-<% } %>
+<% } //throw new Exception("teste de exception");} %>
 

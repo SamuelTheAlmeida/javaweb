@@ -1,8 +1,11 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.ufpr.tads.web2.dao.ClienteDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.ufpr.tads.web2.beans.Cliente"%>
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
+<%@ page errorPage="erro.jsp" %>
+
 <%
     List<Cliente> clientes = new ArrayList<Cliente>();
     ServletContext ctx = request.getServletContext();
@@ -59,34 +62,30 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <%
-                        for (Cliente cliente : clientes) {
-                    %>   
+                <c:forEach var="cliente" items="${clientes}">
                    <tr>
-                    <td> <% out.println(cliente.getCpf()); %> </td>
-                    <td><% out.println(cliente.getNome()); %> </td>
-                    <td><% out.println(cliente.getEmail()); %> </td>
+                    <td> <c:out value="${cliente.getCpf()}" /> </td>
+                    <td> <c:out value="${cliente.getNome()}" /> </td>
+                    <td> <c:out value="${cliente.getEmail()}" /> </td>
                     <td>
-                        <a href="VisualizarClienteServlet?id=<%= cliente.getId()%>"><i class="fas fa-search"></i></a>
+                        <a href="ClientesServlet?action=show&id=<c:out value='${cliente.getId()}' />"><i class="fas fa-search"></i></a>
                     </td>
                     
                     <td>
-                        <a href="FormAlterarClienteServlet?id=<%= cliente.getId()%>"><i class="fas fa-edit"></i></a>
+                        <a href="ClientesServlet?action=formUpdate&id=<c:out value='${cliente.getId()}' />"><i class="fas fa-edit"></i></a>
                     </td>
                     
                     <td>
-                        <a href="RemoverClienteServlet?id=<%= cliente.getId()%>"><i class="fas fa-trash-alt"></i></a>
+                        <a href="ClientesServlet?action=remove&id=<c:out value='${cliente.getId()}' />"><i class="fas fa-trash-alt"></i></a>
                     </td>
                     
-                  </tr>
-                  <%
-                    }  
-                  %>
+                  </tr>                   
+                </c:forEach>
                      
                   
                 </tbody>
               </table> 
-              <a class="btn btn-default text-info" href="FormNovoClienteServlet"><strong class="text-success">Inserir novo</strong></a>   
+              <a class="btn btn-default text-info" href="ClientesServlet?action=formNew"><strong class="text-success">Inserir novo</strong></a>   
         <br>
         </div>
     </body>

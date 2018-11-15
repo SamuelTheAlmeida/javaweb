@@ -1,6 +1,8 @@
+<%@ page errorPage="erro.jsp" %>
 <% 
     String erro = (String)request.getAttribute("msg");
 %>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
