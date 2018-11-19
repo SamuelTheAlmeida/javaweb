@@ -1,19 +1,11 @@
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
-<%
-    int id;
-     try {
-         id = ((LoginBean)session.getAttribute("loginBean")).getId();
-     } catch (Exception e) {
-         id = 0;
-     }
-        
-   if (id == 0) {
-       RequestDispatcher rp = getServletContext().getRequestDispatcher("/erro.jsp");
-       request.setAttribute("msg", "Usuário não está logado...");
-       request.setAttribute("pageReturn", "index.jsp");
-       rp.forward(request, response);
-   }
-%>
+<%@ page errorPage="erro.jsp" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${empty loginBean}">
+    <jsp:forward page="/index.jsp"> 
+        <jsp:param name="msg" value="Usuário precisa se autenticar para acessar o sistema" /> 
+    </jsp:forward> 
+</c:if>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

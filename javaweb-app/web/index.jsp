@@ -1,8 +1,5 @@
 <%@ page errorPage="erro.jsp" %>
-<% 
-    String erro = (String)request.getAttribute("msg");
-%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -33,11 +30,11 @@
   </head>
   <body>
 	<div class="container text-center" id="center">
-            <%  if (erro != null) {  %>
-            <div class="alert">
-                <span class="text-danger"><strong><% out.print(erro); %> </strong></span>
-            </div>
-            <% } %>
+            <c:if test="${not empty msg}">
+                <div class="alert">
+                    <span class="text-danger"><strong>${msg} </strong></span>
+                </div>
+            </c:if>
 		<h1>Login</h1>
 		<form method="POST" action="LoginServlet">
 		  <div class="form-group">

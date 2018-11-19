@@ -5,13 +5,19 @@
  */
 package com.ufpr.tads.web2.servlets;
 
-import com.ufpr.tads.web2.beans.Cliente;
-import com.ufpr.tads.web2.beans.LoginBean;
-import com.ufpr.tads.web2.dao.ClienteDAO;
+import com.ufpr.tads.web2.beans.*;
+import com.ufpr.tads.web2.dao.*;
 import com.ufpr.tads.web2.facade.ClientesFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -38,7 +44,7 @@ public class ClientesServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         
         RequestDispatcher rd = null;
         ServletContext ctx = request.getServletContext();
@@ -58,6 +64,11 @@ public class ClientesServlet extends HttpServlet {
             String action = (String)request.getParameter("action");
             int idCliente = 0;
             Cliente cliente = null;
+            EstadoDAO estadoDAO = new EstadoDAO();
+            CidadeDAO cidadeDAO = new CidadeDAO();
+            List<Estado> estados = null;
+            Estado estado = null;
+            Cidade cidade = null;
             if (action == null || action.equals("list")) {
                List<Cliente> lista = ClientesFacade.buscarTodos();
                rd = getServletContext().getRequestDispatcher("/clientesListar.jsp");
@@ -75,8 +86,12 @@ public class ClientesServlet extends HttpServlet {
                 else if (action.equals("formUpdate")) {
                     idCliente = Integer.parseInt(request.getParameter("id"));
                     cliente = ClientesFacade.buscar(idCliente);
+                    estados = estadoDAO.listar();
                     request.setAttribute("cliente", cliente);
-                    rd = ctx.getRequestDispatcher("/clientesAlterar.jsp");
+                    request.setAttribute("estados", estados);
+                    request.setAttribute("cidadeSelecionada", cliente.getCidade());
+                    request.setAttribute("form", "alterar");
+                    rd = ctx.getRequestDispatcher("/clientesForm.jsp");
                     rd.forward(request, response);
                 }
                 else if(action.equals("remove")) {
@@ -86,6 +101,8 @@ public class ClientesServlet extends HttpServlet {
                 }
                 else if (action.equals("update")) {
                     cliente = new Cliente();
+                    estado = new Estado();
+                    cidade = new Cidade();
                     cliente.setId( (Integer.parseInt(request.getParameter("idCliente"))) );
                     cliente.setCpf( request.getParameter("cpf"));
                     cliente.setNome( request.getParameter("nome"));
@@ -93,36 +110,50 @@ public class ClientesServlet extends HttpServlet {
                     cliente.setRua( request.getParameter("rua"));
                     cliente.setCep( request.getParameter("cep"));
                     cliente.setNumero(  Integer.parseInt(request.getParameter("numero")) );
-                    cliente.setCidade(request.getParameter("cidade"));
-                    cliente.setUf(request.getParameter("uf"));
+                    try {
+                        cidade = cidadeDAO.obter(Integer.parseInt(request.getParameter("cidade")));
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    cliente.setCidade(cidade);
                     ClientesFacade.alterar(cliente);
                     response.sendRedirect("ClientesServlet");
                 }
                 else if (action.equals("formNew")) {
-                    //response.sendRedirect("/clientesNovo.jsp");
-                    rd = getServletContext().getRequestDispatcher("/clientesNovo.jsp");
+                    rd = getServletContext().getRequestDispatcher("/clientesForm.jsp");
+                    estados = estadoDAO.listar();
+                    request.setAttribute("estados", estados);
                     rd.forward(request, response);
                 }
                 else if (action.equals("new")) {
                     cliente = new Cliente();
-                    cliente.setCpf(request.getParameter("cpf"));
+                    cliente.setCpf(request.getParameter("cpf").replaceAll("\\W", ""));
                     cliente.setNome(request.getParameter("nome"));
                     cliente.setEmail(request.getParameter("email"));
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    String str = request.getParameter("data");   // Data como String
+                    Date data = null;
+                            try {
+                                    data = format.parse(str); 
+                            } 
+                         catch (ParseException e) {
+                                    System.out.println("Data no formato errado");
+                                    e.printStackTrace();
+                            }
+                    System.out.println("Data = " + data);
+
+                    cliente.setData(data);
                     cliente.setRua(request.getParameter("rua"));
-                    cliente.setCep(request.getParameter("cep"));
+                    cliente.setCep(request.getParameter("cep").replaceAll("\\W", ""));
                     cliente.setNumero(Integer.parseInt(request.getParameter("numero")));
-                    cliente.setCidade(request.getParameter("cidade"));
-                    cliente.setUf((String)request.getParameter("uf"));
                     try {
-                        ClientesFacade.inserir(cliente);
-                        response.sendRedirect("ClientesServlet");
-                    } catch (Exception e) {
-                        throw e;
+                    cidade = cidadeDAO.obter(Integer.parseInt(request.getParameter("cidade")));
+                    cliente.setCidade(cidade);
+                    ClientesFacade.inserir(cliente);
+                    response.sendRedirect("ClientesServlet");
+                    } catch (ServletException e) {
+                        throw new ServletException(e);
                     }
-                    
-                    
-                    //rd = getServletContext().getRequestDispatcher("/ClientesServlet");
-                    //rd.forward(request, response);
                 }
             }
         }
@@ -140,7 +171,11 @@ public class ClientesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
     }
 
     /**
@@ -154,7 +189,12 @@ public class ClientesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+       
     }
 
     /**

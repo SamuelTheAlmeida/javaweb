@@ -25,12 +25,11 @@
     </head>
     <body>
         <div class="container text-center" id="center">
-            <h1 class="text-danger">Erro: <c:out value="${pageContext.exception.message}"/> </h1> 
-            <h6><c:out value="${pageContext.out.flush()}" /></h6>
-            <h6><c:out value="${pageContext.exception.printStackTrace(pageContext.response.writer)}" /></h6>
-           <!-- <a href="<%out.print(pageReturn); %>">Retornar</a> -->
+            <h1 class="text-danger">Erro: ${pageContext.exception.message} </h1> 
+            <h6>${pageContext.out.flush()}" /></h6>
+            <h6>${pageContext.exception.printStackTrace(pageContext.response.writer)}</h6>
         <footer>
-            <p> Em caso de problemas contactar o administrador: <% out.print(email); %></p>
+            <p> Em caso de problemas contactar o administrador: ${email}</p>
         </footer>
         </div>
     </body>

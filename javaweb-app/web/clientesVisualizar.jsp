@@ -1,30 +1,22 @@
 <%@page import="com.ufpr.tads.web2.beans.Cliente"%>
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
-<% 
-    int id = 0;
-    Cliente cliente = (Cliente)request.getAttribute("cliente");
-    ServletContext ctx = request.getServletContext();
-    RequestDispatcher rd;
-    try {
-        id = ((LoginBean)session.getAttribute("loginBean")).getId();
-    } catch (Exception e) {
-        id = 0;
-    }
-    
-    if (id == 0) {
-        rd = ctx.getRequestDispatcher("/index.jsp");
-        request.setAttribute("msg", "Usuário precisa estar autenticado para acessar ao sistema");
-        rd.forward(request, response);
-    }
+<%@ page errorPage="erro.jsp" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-%>
+<c:if test="${empty loginBean}">
+    <jsp:forward page="/index.jsp"> 
+        <jsp:param name="msg" value="Usuário precisa se autenticar para acessar o sistema" /> 
+    </jsp:forward> 
+</c:if>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Portal</title>
+        <title>Visualizar Cliente</title>
+
         <link href="https://bootswatch.com/3/superhero/bootstrap.css" rel="stylesheet">
         <style>
             #center {
@@ -35,48 +27,21 @@
     </head>
     <body>
         <div class="container text-center" id="center">
-        <form class="" method="POST" action="ClientesServlet">
-          <input type="hidden" name="action" value="update" />
-
-            <input hidden type="text" name="idCliente" id="idCliente" value="<% out.print(cliente.getId()); %>" >
-        <div class="form-group">
-          <label for="inputCPF">CPF</label>
-          <input disabled type="text" class="form-control" id="inputCPF" name="cpf" value=" ${cliente.cpf}">
-        </div>
-        <div class="form-group">
-          <label for="inputNome">Nome</label>
-          <input disabled type="text" class="form-control" id="inputNome" name="nome" value="${cliente.nome}">
-        </div>
-        <div class="form-group">
-          <label for="inputEmail">Email</label>
-          <input disabled type="email" class="form-control" id="inputEmail" name="email" value="${cliente.email}">
-        </div>
-       <div class="form-group">
-          <label for="inputRua">Rua</label>
-          <input disabled type="text" class="form-control" id="inputRua" name="rua" value="${cliente.rua}">
-        </div>
-        <div class="form-group">
-          <label for="inputNúmero">Número</label>
-          <input disabled type="number" class="form-control" id="inputNumero" name="numero" value="${cliente.numero}">
-        </div>
-       <div class="form-group">
-          <label for="inputCep">CEP</label>
-          <input disabled type="number" class="form-control" id="inputCEP" name="cep" value="${cliente.cep}">
-        </div>
-       <div class="form-group">
-          <label for="inputCidade">Cidade</label>
-          <input disabled type="text" class="form-control" id="inputCidade" name="cidade" value="${cliente.cidade}">
-        </div>
-       <div class="form-group">
-          <label for="inputCidade">UF</label>
-          <input disabled type="text" class="form-control" id="inputUF" name="uf" value="${cliente.uf}">
-        </div>
-        
-       
-        <a href="ClientesServlet?action=list"><button type="button" class="btn btn-default">Retornar</button></a>
-      </form>
+            <h2>${cliente.nome}</h2>
+        <div class="jumbotron">
+            <h5><strong>CPF:</strong> ${cliente.cpf}</h5>
+        <h5><strong>Email: </strong>${cliente.email}</h5>
+        <h5><strong>Data de Nascimento:</strong> ${cliente.data}</h5>
+        <h5><strong>Rua: </strong>${cliente.rua}</h5>
+        <h5><strong>Número:</strong> ${cliente.numero}</h5>
+        <h5><strong>CEP: </strong>${cliente.cep}</h5>
+        <h5><strong>Estado:</strong> ${cliente.cidade.estado.nome}</h5>
+        <h5><strong>Cidade:</strong> ${cliente.cidade.nome}</h5>
+        <a href="ClientesServlet"><button type="button" class="btn btn-primary">Retornar</button></a>
+      </div>
 
         <br>
         </div>
     </body>
+  
 </html>

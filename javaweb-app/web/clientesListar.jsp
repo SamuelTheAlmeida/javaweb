@@ -6,26 +6,11 @@
 <%@page import="com.ufpr.tads.web2.beans.LoginBean"%>
 <%@ page errorPage="erro.jsp" %>
 
-<%
-    List<Cliente> clientes = new ArrayList<Cliente>();
-    ServletContext ctx = request.getServletContext();
-   int id;
-        try {
-            id = ((LoginBean)session.getAttribute("loginBean")).getId();
-        } catch (Exception e) {
-            id = 0;
-        }
-    
-    if (id == 0) {
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.jsp");
-        request.setAttribute("msg", "Usuario deve se autenticar para acessar o sistema");
-        rd.forward(request, response);
-    } else {
-        clientes = (List<Cliente>)request.getAttribute("clientes");
-    }
-    
-
-%>
+<c:if test="${empty loginBean}">
+    <jsp:forward page="/index.jsp"> 
+        <jsp:param name="msg" value="Usuário precisa se autenticar para acessar o sistema" /> 
+    </jsp:forward> 
+</c:if>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -47,7 +32,7 @@
     </head>
     <body>
         <div class="container text-center" id="center">
-        <h1>Bem vindo, <jsp:getProperty name="loginBean" property="nome"/></h1>
+        <h1>Bem vindo, ${loginBean.nome}</h1>
         
 
               <table class="table table-striped">
@@ -64,19 +49,19 @@
                 <tbody>
                 <c:forEach var="cliente" items="${clientes}">
                    <tr>
-                    <td> <c:out value="${cliente.getCpf()}" /> </td>
-                    <td> <c:out value="${cliente.getNome()}" /> </td>
-                    <td> <c:out value="${cliente.getEmail()}" /> </td>
+                    <td> ${cliente.getCpf()} </td>
+                    <td> ${cliente.getNome()}  </td>
+                    <td> ${cliente.getEmail()}  </td>
                     <td>
-                        <a href="ClientesServlet?action=show&id=<c:out value='${cliente.getId()}' />"><i class="fas fa-search"></i></a>
+                        <a href="ClientesServlet?action=show&id=${cliente.getId()} "><i class="fas fa-search"></i></a>
                     </td>
                     
                     <td>
-                        <a href="ClientesServlet?action=formUpdate&id=<c:out value='${cliente.getId()}' />"><i class="fas fa-edit"></i></a>
+                        <a href="ClientesServlet?action=formUpdate&id=${cliente.getId()}"><i class="fas fa-edit"></i></a>
                     </td>
                     
                     <td>
-                        <a href="ClientesServlet?action=remove&id=<c:out value='${cliente.getId()}' />"><i class="fas fa-trash-alt"></i></a>
+                        <a onclick="return confirm('Deseja remover o cliente?')" href="ClientesServlet?action=remove&id=${cliente.getId()}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                     
                   </tr>                   

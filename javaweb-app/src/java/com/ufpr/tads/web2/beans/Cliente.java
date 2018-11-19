@@ -6,7 +6,7 @@
 package com.ufpr.tads.web2.beans;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *
@@ -21,13 +21,12 @@ public class Cliente implements Serializable {
 	private String rua;
 	private int numero;
 	private String cep;
-	private String cidade;
-	private String uf;
+	private Cidade cidade;
 
     public Cliente() {
     }
 
-    public Cliente(int id, String cpf, String nome, String email, Date data, String rua, int numero, String cep, String cidade, String uf) {
+    public Cliente(int id, String cpf, String nome, String email, Date data, String rua, int numero, String cep, Cidade cidade) {
         this.id = id;
         this.cpf = cpf;
         this.nome = nome;
@@ -37,10 +36,9 @@ public class Cliente implements Serializable {
         this.numero = numero;
         this.cep = cep;
         this.cidade = cidade;
-        this.uf = uf;
     }
     
-        public Cliente(String cpf, String nome, String email, String rua, int numero, String cep, String cidade, String uf) {
+        public Cliente(String cpf, String nome, String email, String rua, int numero, String cep, Cidade cidade) {
         this.cpf = cpf;
         this.nome = nome;
         this.email = email;
@@ -48,7 +46,6 @@ public class Cliente implements Serializable {
         this.numero = numero;
         this.cep = cep;
         this.cidade = cidade;
-        this.uf = uf;
     }
 
     public int getId() {
@@ -115,21 +112,11 @@ public class Cliente implements Serializable {
         this.cep = cep;
     }
 
-    public String getCidade() {
+    public Cidade getCidade() {
         return cidade;
     }
 
-    public void setCidade(String cidade) {
+    public void setCidade(Cidade cidade) {
         this.cidade = cidade;
-    }
-
-    public String getUf() {
-        return uf;
-    }
-
-    public void setUf(String uf) {
-        this.uf = uf;
-    }
-        
-        
+    }  
 }
